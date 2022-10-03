@@ -11,12 +11,10 @@ export const ImageGalleryItem = ({ item }) => {
 
   useEffect(() => {
     const onModalKeydown = e => {
-      console.log(e.key);
       if (e.key === 'Escape') {
         closeModal();
       }
     };
-    console.log(isModalOpen);
     if (isModalOpen) {
       window.addEventListener('keydown', onModalKeydown);
     } else window.removeEventListener('keydown', onModalKeydown);
