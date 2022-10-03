@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'components/Modal/Modal';
 import {
@@ -6,50 +6,44 @@ import {
   GalleryImgStyled,
 } from 'components/ImageGalleryItem/ImageGalleryItemStyled';
 
-export class ImageGalleryItem extends Component {
-  state = {
-    isModalOpen: false,
+export const ImageGalleryItem = ({ item }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const onModalKeydown = e => {
+      console.log(e.key);
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    };
+    console.log(isModalOpen);
+    if (isModalOpen) {
+      window.addEventListener('keydown', onModalKeydown);
+    } else window.removeEventListener('keydown', onModalKeydown);
+  }, [isModalOpen]);
+
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.isModalOpen) {
-      window.addEventListener('keydown', this.onModalKeydown);
-    } else window.removeEventListener('keydown', this.onModalKeydown);
-  }
-
-  onModalKeydown = e => {
-    if (e.key === 'Escape') {
-      this.closeModal();
-    }
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  openModal = () => {
-    this.setState({ isModalOpen: true });
-  };
-
-  closeModal = () => {
-    this.setState({ isModalOpen: false });
-  };
-  render() {
-    const { webformatURL, largeImageURL, tags } = this.props.item;
-    return (
-      <GalleryItemStyled>
-        <GalleryImgStyled
-          src={webformatURL}
-          alt={tags}
-          onClick={this.openModal}
+  const { webformatURL, largeImageURL, tags } = item;
+  return (
+    <GalleryItemStyled>
+      <GalleryImgStyled src={webformatURL} alt={tags} onClick={openModal} />
+      {isModalOpen && (
+        <Modal
+          largeImg={largeImageURL}
+          about={tags}
+          onModalClose={closeModal}
         />
-        {this.state.isModalOpen && (
-          <Modal
-            largeImg={largeImageURL}
-            about={tags}
-            onModalClose={this.closeModal}
-          />
-        )}
-      </GalleryItemStyled>
-    );
-  }
-}
+      )}
+    </GalleryItemStyled>
+  );
+};
 
 ImageGalleryItem.propTypes = {
   item: PropTypes.object.isRequired,
