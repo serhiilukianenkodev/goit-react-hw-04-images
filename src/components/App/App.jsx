@@ -16,9 +16,14 @@ export const App = () => {
     setPage(page => page + 1);
   };
 
+  const onSubmit = query => {
+    setSearchQuery(query);
+    setPage(1);
+  };
+
   return (
     <AppStyled>
-      <Searchbar onSubmit={setSearchQuery} />
+      <Searchbar onSubmit={onSubmit} />
 
       <ImageGallery query={searchQuery} page={page} setStatus={setStatus} />
       {status === 'loading' && <Loader />}

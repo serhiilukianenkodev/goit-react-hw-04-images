@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'components/Modal/Modal';
 import {
@@ -9,34 +9,19 @@ import {
 export const ImageGalleryItem = ({ item }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const onModalKeydown = e => {
-      if (e.key === 'Escape') {
-        closeModal();
-      }
-    };
-    if (isModalOpen) {
-      window.addEventListener('keydown', onModalKeydown);
-    } else window.removeEventListener('keydown', onModalKeydown);
-  }, [isModalOpen]);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const toggleModal = () => {
+    setIsModalOpen(isOpen => !isOpen);
   };
 
   const { webformatURL, largeImageURL, tags } = item;
   return (
     <GalleryItemStyled>
-      <GalleryImgStyled src={webformatURL} alt={tags} onClick={openModal} />
+      <GalleryImgStyled src={webformatURL} alt={tags} onClick={toggleModal} />
       {isModalOpen && (
         <Modal
           largeImg={largeImageURL}
           about={tags}
-          onModalClose={closeModal}
+          onModalClose={toggleModal}
         />
       )}
     </GalleryItemStyled>
