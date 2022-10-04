@@ -17,12 +17,12 @@ export const Modal = ({ largeImg, about, onModalClose }) => {
     };
   });
 
+  const onModalClick = e => {
+    if (e.target === e.currentTarget) onModalClose();
+  };
+
   return (
-    <Overlay
-      onClick={e => {
-        if (e.target === e.currentTarget) onModalClose();
-      }}
-    >
+    <Overlay onClick={onModalClick}>
       <ModalStyled>
         <img src={largeImg} alt={about} />
       </ModalStyled>
